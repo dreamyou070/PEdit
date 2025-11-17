@@ -1,0 +1,34 @@
+# 대용량 데이터/압축파일
+*.tar
+*.tar.gz
+*.zip
+*.tgz
+
+# Open Images + pico/nano-banana 데이터 폴더들
+openimage_source_images/
+**/openimage_source_images/
+**/nano-banana-300k/
+**/images/
+**/downloads/
+**/checkpoints/
+**/weights/
+
+# 파이썬 캐시/로그
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+logs/
+wandb/
+runs/
+
+# 모델 파일
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# 기타
+.DS_Store
+

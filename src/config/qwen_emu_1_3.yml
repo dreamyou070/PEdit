@@ -1,0 +1,56 @@
+---
+job: extension
+config:
+  name: "my_first_qwen_image_edit_2509_lora_v1"
+  process:
+    - type: 'diffusion_trainer'
+      training_folder: "output"
+      device: cuda:0
+      save:
+        dtype: bfloat16
+        save_every: 250
+        max_step_saves_to_keep: 4
+      datasets:
+        - folder_path: "/path/to/images/folder"
+          src_folder: '/MIR/nas1/dreamyou070/data/EmuEdit/export/test/input_image'
+          inst_folder: '/MIR/nas1/dreamyou070/data/EmuEdit/export/test/edit_instruction'
+          result_folder: '/MIR/nas1/dreamyou070/Project/Project_EDIF/1_EmuEditBench/13_Pedit_Qwen_main_100_reg_300'
+          file_idx: 0
+          filename: "HQ-Edit_1_0000072.png"  #  --target "HQ-Edit_1_0000002"
+          control_path: "/path/to/control/folder"
+          caption_ext: "txt"
+          caption_dropout_rate: 0.05  # will drop out the caption 5% of time
+          shuffle_tokens: false
+          cache_latents_to_disk: true  # leave this true unless you know what you're doing
+          resolution: [ 512, 768 ]  # flux enjoys multiple resolutions
+          min_num: 2,3,5,7,10,12,18
+          max_num: 18
+      train:
+        batch_size: 1
+        cache_text_embeddings: true
+        lr: 1e-4
+        w_main: 1.0
+        w_reg: 300
+        dtype: bf16
+      model:
+        name_or_path: "Qwen/Qwen-Image-Edit-2509"
+        arch: "qwen_image_edit_plus"
+        quantize: true
+        quantize_te: true
+        qtype_te: "qfloat8"
+        low_vram: false
+      sample:
+        sampler: "flowmatch" # must match train.noise_scheduler
+        sample_every: 250 # sample every this many steps
+        width: 1024
+        height: 1024
+        samples:
+        neg: ""
+        seed: 42
+        walk_seed: true
+        guidance_scale: 3
+        sample_steps: 25
+# you can add any additional meta info here. [name] is replaced with config name at top
+meta:
+  name: "[name]"
+  version: '1.0'
