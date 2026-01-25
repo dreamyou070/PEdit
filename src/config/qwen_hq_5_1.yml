@@ -1,0 +1,63 @@
+---
+job: extension
+config:
+  # this name will be the folder and filename name
+  name: "my_first_qwen_image_edit_2509_lora_v1"
+  process:
+    - type: 'diffusion_trainer'
+      training_folder: "output"
+      device: cuda:0
+      save:
+        dtype: bfloat16
+        save_every: 250
+        max_step_saves_to_keep: 4
+      datasets:
+        - folder_path: "/path/to/images/folder"
+          src_folder: '/MIR/nas1/dreamyou070/hf_cache/data/HQ-Edit/export/input_image'
+          inst_folder: '/MIR/nas1/dreamyou070/hf_cache/data/HQ-Edit/export/edit_instruction'
+          result_folder: '/MIR/nas1/dreamyou070/PEdit/result/2_HQEdit/13_Pedit_Qwen_main_500_reg_100_202511119'
+          file_idx: 3
+          filename: "HQ-Edit_1_0000072.png"  #  --target "HQ-Edit_1_0000002"
+          control_path: "/path/to/control/folder"
+          caption_ext: "txt"
+          caption_dropout_rate: 0.05  # will drop out the caption 5% of time
+          shuffle_tokens: false
+          cache_latents_to_disk: true  # leave this true unless you know what you're doing
+          resolution: [ 512, 768 ]  # flux enjoys multiple resolutions
+      train:
+        batch_size: 1
+        cache_text_embeddings: true
+        steps: 3000  # total number of steps to train 500 - 4000 is a good range
+        gradient_accumulation: 1
+        timestep_type: "weighted"
+        train_unet: true
+        train_text_encoder: false  # probably won't work with qwen image
+        gradient_checkpointing: true  # need the on unless you have a ton of vram
+        noise_scheduler: "flowmatch" # for training only
+        optimizer: "adamw8bit"
+        lr: 1e-4
+        w_main: 500
+        w_reg: 100
+        dtype: bf16
+      model:
+        name_or_path: "Qwen/Qwen-Image-Edit-2509"
+        arch: "qwen_image_edit_plus"
+        quantize: true
+        quantize_te: true
+        qtype_te: "qfloat8"
+        low_vram: false
+      sample:
+        sampler: "flowmatch" # must match train.noise_scheduler
+        sample_every: 250 # sample every this many steps
+        width: 1024
+        height: 1024
+        samples:
+        neg: ""
+        seed: 42
+        walk_seed: true
+        guidance_scale: 3
+        sample_steps: 25
+# you can add any additional meta info here. [name] is replaced with config name at top
+meta:
+  name: "[name]"
+  version: '1.0'

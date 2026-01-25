@@ -1,0 +1,42 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# venv/conda
+venv/
+.venv/
+env/
+.conda/
+**/venv*/
+**/site-packages/**
+
+# IDE
+.idea/
+.vscode/
+
+# logs & runs
+wandb/
+outputs/
+runs/
+logs/
+tmp/
+*.log
+
+# results & big artifacts
+result/
+checkpoints/
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+*.npz
+*.npy
+*.zip
+*.tar
+*.tar.gz
+*.mp4

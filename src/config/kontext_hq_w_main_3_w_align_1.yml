@@ -1,0 +1,66 @@
+---
+job: extension
+config:
+  # this name will be the folder and filename name
+  name: "my_first_flux_kontext_lora_v1"
+  process:
+    - type: 'sd_trainer'
+      training_folder: "output"
+      device: cuda:0
+      network:
+        type: "lora"
+        linear: 16
+        linear_alpha: 16
+      save:
+        dtype: float16 # precision to save
+        save_every: 250 # save every this many steps
+        max_step_saves_to_keep: 4 # how many intermittent saves to keep
+        push_to_hub: false #change this to True to push your trained model to Hugging Face.
+      datasets:
+        - folder_path: "/path/to/images/folder"
+          src_folder: "/MIR/nas1/dreamyou070/data/HQ-Edit/export/input_image"
+          inst_folder: "/MIR/nas1/dreamyou070/data/HQ-Edit/export/edit_instruction"
+          file_idx: 0
+          filename: "HQ-Edit_1_0000158.png"
+          data: "hq"
+          result_folder: "/MIR/nas1/dreamyou070/Project/Project_EDIF/2_HQEdit/12_PEdit_Kontext_w_main_3_w_reg_1"
+          control_path: "/path/to/control/folder"
+          caption_ext: "txt"
+          caption_dropout_rate: 0.05
+          shuffle_tokens: false
+          cache_latents_to_disk: true
+          resolution: [ 512, 768 ]
+          max_epochs: 5
+          stage_1: 3
+      train:
+        batch_size: 1
+        steps: 3000  # total number of steps to train 500 - 4000 is a good range
+        gradient_accumulation_steps: 1
+        train_unet: true
+        train_text_encoder: false  # probably won't work with flux
+        gradient_checkpointing: true  # need the on unless you have a ton of vram
+        noise_scheduler: "flowmatch" # for training only
+        optimizer: "adamw8bit"
+        lr: 1e-4
+        timestep_type: "weighted" # sigmoid, linear, or weighted.
+        w_main: 3
+        w_reg: 1
+        dtype: bf16
+      model:
+        name_or_path: "black-forest-labs/FLUX.1-Kontext-dev"
+        arch: "flux_kontext"
+        quantize: true
+      sample:
+        sampler: "flowmatch" # must match train.noise_scheduler
+        sample_every: 250 # sample every this many steps
+        width: 1024
+        height: 1024
+        neg: ""  # not used on flux
+        seed: 42
+        walk_seed: true
+        guidance_scale: 4
+        sample_steps: 20
+# you can add any additional meta info here. [name] is replaced with config name at top
+meta:
+  name: "[name]"
+  version: '1.0'
