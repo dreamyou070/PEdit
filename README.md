@@ -1,7 +1,9 @@
-# PEdit: Pareto-Guided Image Editing via Dynamic Latent Trajectory Control
+## 🔥 PEdit (CVPR 2026)
 
-> CVPR 2026  
-> Official implementation of **PEdit**
+> **PEdit: Pareto-Guided Image Editing via Dynamic Latent Trajectory Control**  
+> Accepted at **CVPR 2026**
+
+[📄 Paper](링크) | [📂 Code](링크) | [🎥 Demo](링크)
 
 ---
 
