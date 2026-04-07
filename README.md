@@ -68,7 +68,7 @@ Existing methods often fail to maintain this balance, resulting in:
 
 ## 🖼️ Results
 
-<img src="figure/figure_main.png" width="900"/>
+<img src="assets/figure_main.png" width="900"/>
 
 ### Qualitative Observations
 
