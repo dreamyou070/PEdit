@@ -5,109 +5,91 @@
 
 ---
 
+## ✨ Teaser
+
+<img src="assets/figure_1.png" width="900"/>
+
+---
+
 ## 🔥 Overview
 
-Text instruction-based image editing must balance two conflicting objectives:
+Text instruction-based image editing requires balancing two conflicting objectives:
 
-- **Semantic Alignment** (follow the text instruction)
-- **Structural Preservation** (keep the source image)
+- **Semantic Alignment** (following the text instruction)
+- **Structural Preservation** (maintaining the source image)
 
-However, existing methods often fail to maintain this balance, leading to:
+Existing methods often fail to maintain this balance, resulting in:
 - over-editing (text-dominant)
 - structure collapse (image-dominant)
 
-👉 We propose **PEdit**, a diffusion-based image editing method that formulates editing as a **multi-objective optimization problem** and dynamically controls the latent trajectory toward the **Pareto-optimal region**.
+👉 We propose **PEdit**, a diffusion-based image editing framework that formulates editing as a **multi-objective optimization problem** and guides the latent trajectory toward the **Pareto-optimal region**.
 
 ---
 
-## 🧠 Key Contributions
+## 🧠 Key Idea
 
-- **Pareto-guided editing framework**  
-  → explicitly balances semantic fidelity and structural consistency
-
-- **Dynamic condition scaling**  
-  → adaptively adjusts text/image embeddings per Transformer block
-
-- **Latent trajectory control**  
-  → maintains balance throughout the denoising process
-
-- **General plug-and-play method**  
-  → applicable to DiT-based editing models (e.g., Kontext, QwenEdit)
+- Treat editing as a **Pareto optimization problem**
+- Dynamically balance:
+  - text guidance
+  - image structure
+- Control editing via **latent trajectory + condition scaling**
 
 ---
 
-## ⚙️ Method
+## ⚙️ Method Overview
 
-### 🧩 Problem Formulation
+<img src="assets/figure_pipeline.png" width="900"/>
 
-We formulate image editing as:
+### Two-stage Pipeline
 
-- Objective 1: Semantic alignment (Text guidance)
-- Objective 2: Structure preservation (Source image)
+**Stage 1: Pareto Initialization**
+- Optimize condition scaling in early timesteps
+- Find balanced latent
 
-These objectives are **conflicting**, so we optimize along the **Pareto front** instead of a single objective.
+**Stage 2: Editing Pathway Control**
+- Maintain balance across denoising steps
+- Prevent collapse toward text-only or image-only
 
 ---
 
-### 🧪 Key Metrics
-
-We introduce two key indicators:
+## 🧪 Key Metrics
 
 - **TCR (Text Cross-Attention Ratio)**  
-  → measures how strongly the model follows text
+  → measures semantic dominance
 
 - **SSNR (Structural Signal-to-Noise Ratio)**  
-  → measures how well source structure is preserved
-
----
-
-### 🚀 Pipeline
-
-PEdit consists of two stages:
-
-#### Stage 1: Pareto Initialization
-- Optimize condition scaling in early timesteps
-- Find a balanced latent near the Pareto front
-
-#### Stage 2: Editing Pathway Control
-- Maintain balance during denoising
-- Prevent collapse toward either objective
+  → measures structure preservation
 
 ---
 
 ## 🖼️ Results
 
-### ✨ Qualitative Results
+<img src="figure/figure_main.png" width="900"/>
+
+### Qualitative Observations
+
+- Strong semantic alignment (better than Kontext, QwenEdit)
+- Preserves structure without over-editing (better than ReFlex)
+- Works for both:
+  - Local edits
+  - Global edits
+
+---
+
+## 📊 Quantitative Results
 
 PEdit achieves:
 
-- Precise region-wise editing
-- Strong semantic alignment
-- Robust structure preservation
+- **CLIP-T ↑** (better semantic alignment)
+- **CLIP-I / DINO-I ↑** (better structure preservation)
+- **L2 distance ↓**
+- **FID ↓**
 
-Compared to prior methods:
-- avoids over-editing (ReFlex)
-- avoids structure collapse (Kontext, QwenEdit)
-- handles both local and global edits effectively
+👉 Consistently outperforms prior methods across benchmarks
 
 ---
 
-### 📊 Quantitative Results
-
-PEdit consistently improves:
-
-- **CLIP-T ↑** (semantic alignment)
-- **CLIP-I / DINO-I ↑** (structure preservation)
-- **L2 distance ↓** (better reconstruction)
-- **FID ↓** (better perceptual quality)
-
-👉 Achieves strong performance across both:
-- Local editing
-- Global editing
-
----
-
-### 👤 User Study
+## 👤 User Study
 
 - Highest preference in:
   - Edit Fidelity
@@ -117,28 +99,26 @@ PEdit consistently improves:
 
 ---
 
-### 🔁 Multi-Edit Performance
+## 🔁 Multi-Edit Capability
 
-- Existing text-only methods fail to control multiple regions
-- **PEdit enables precise region-wise multi-editing**
+- Existing methods fail in multi-region editing
+- **PEdit enables precise region-wise control**
 
 ---
 
 ## 📊 Benchmarks
 
-We evaluate on:
-
-- **HQ-Edit** (synthetic dataset)
-- **Emu-Edit Bench** (real-world dataset)
+- **HQ-Edit** (synthetic)
+- **Emu-Edit Bench** (real-world)
 
 ---
 
 ## ⚡ Advantages
 
-- No inversion required (faster than inversion-based methods)
-- No retraining per step
-- Stable across different editing tasks
-- Works with existing DiT pipelines
+- No inversion required → faster inference
+- No step-wise optimization
+- Stable across diverse editing tasks
+- Plug-and-play with DiT models
 
 ---
 
