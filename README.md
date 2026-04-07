@@ -7,7 +7,11 @@
 
 ## ✨ Teaser
 
-<img src="assets/figure_1.png" width="400"/>
+<p align="center">
+  <img src="assets/figure_1.png" width="400"/>
+</p>
+
+
 
 ---
 
